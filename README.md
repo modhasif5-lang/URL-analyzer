@@ -18,13 +18,13 @@ A **production-ready REST API** built with FastAPI that accepts a webpage URL, a
 │                     DOCKER COMPOSE NETWORK                      │
 │                                                                 │
 │  ┌──────────────────┐    ┌──────────────────┐    ┌───────────┐  │
-│  │   FastAPI (API)  │──▶│ Redis (Cache +   │◀─ ─│  Celery   │  │
-│  │   :8000          │    │ Broker + Backend)│    │  Worker   │  │
-│  │                  │    │ :6379            │    │           │  │
-│  │  • /analyze      │    │                  │    │  • Tasks  │  │
-│  │  • /status/{id}  │    │ • Cache (DB 0)   │    │  • Retry  │  │
-│  │  • /result/{id}  │    │ • Broker (DB 1)  │    │  • Scrape │  │
-│  │  • /health       │    │ • Backend (DB 2) │    │  • Parse  │  │
+│  │   FastAPI (API)   │───▶│  Redis (Cache +  │◀───│  Celery   │  │
+│  │   :8000           │    │  Broker + Backend)│    │  Worker   │  │
+│  │                   │    │  :6379            │    │           │  │
+│  │  • /analyze       │    │                   │    │  • Tasks  │  │
+│  │  • /status/{id}   │    │  • Cache (DB 0)   │    │  • Retry  │  │
+│  │  • /result/{id}   │    │  • Broker (DB 1)  │    │  • Scrape │  │
+│  │  • /health        │    │  • Backend (DB 2) │    │  • Parse  │  │
 │  └──────────────────┘    └──────────────────┘    └───────────┘  │
 │                                                                 │
 └─────────────────────────────────────────────────────────────────┘

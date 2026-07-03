@@ -1,0 +1,16 @@
+# ===================================
+# File: requirements.txt
+# ===================================
+# Production and development dependencies
+
+fastapi==0.115.12
+uvicorn[standard]==0.34.3
+celery==5.4.0
+redis==5.3.0
+requests==2.32.3
+beautifulsoup4==4.13.4
+pydantic==2.11.3
+pydantic-settings==2.9.1
+python-dotenv==1.1.0
+pytest==8.3.5
+httpx==0.28.1

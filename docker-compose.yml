@@ -1,0 +1,59 @@
+# ===================================
+# File: docker-compose.yml
+# ===================================
+# Orchestrates the API, Celery worker, and Redis services.
+
+services:
+  # ── Redis ──────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # ── FastAPI Application ────────────────────
+  api:
+    build: .
+    container_name: url-analyzer-api
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env.example
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+    volumes:
+      - ./logs:/app/logs
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # ── Celery Worker ──────────────────────────
+  worker:
+    build: .
+    container_name: url-analyzer-worker
+    command: celery -A app.celery_app:celery_app worker --loglevel=info --concurrency=2
+    env_file:
+      - .env.example
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+    volumes:
+      - ./logs:/app/logs
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  redis_data:
