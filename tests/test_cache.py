@@ -4,7 +4,7 @@ File: tests/test_cache.py
 ===================================
 
 Tests for the Redis cache module.
-Uses mocked Redis client to avoid external dependencies.
+It uses mocked Redis client to avoid external dependencies.
 """
 
 from unittest.mock import MagicMock, patch
